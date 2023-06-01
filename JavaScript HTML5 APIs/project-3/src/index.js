@@ -8,6 +8,7 @@ import stopIcon from '../assets/img/icons/stop.svg';
 import volumeIcon from '../assets/img/icons/volume.svg';
 import volumeMuteIcon from '../assets/img/icons/volume-mute.svg';
 import pipIcon from '../assets/img/icons/popup.svg';
+import fullscreenIcon from '../assets/img/icons/fullscreen.svg';
 
 
 const app = document.getElementById('app');
@@ -22,7 +23,8 @@ app.innerHTML = `
 
         <!-- <video autoplay loop> -->
         
-        <video class="media" controls>
+        <!-- <video class="media" controls> -->
+        <video class="media">
             <source src="${autumnMp4}" type="video/mp4">
             <p>
                 HTML5 Video is not supported.
@@ -41,6 +43,9 @@ app.innerHTML = `
                 <input type="range" class="player__timeline" min="0" max="100" value="0">
                 <span class="player__duration"></span>
             </div>
+            <button type="button" class="player__fullscreen" aria-label="Fullscreen">
+                <img src="${fullscreenIcon}" alt="Fullscreen Icon">
+            </button>
             <button type="button" class="player__pip" aria-label="Picture-in-Picture">
                 <img src="${pipIcon}" alt="Picture-in-Picture Icon">
             </button>
@@ -206,4 +211,36 @@ const initPageVisibility = () => {
 
 if ('visibilityState' in document) {
     initPageVisibility();
+}
+
+const fullscreen = player.querySelector('.player__fullscreen');
+
+const initFullscreen = () => {
+    fullscreen.addEventListener('click', async () => {
+        try {
+            if (document.fullscreenElement === null) {
+                // await document.documentElement.requestFullscreen();
+                await media.requestFullscreen();
+            }
+        } catch(e) {
+            console.warn(e);
+        }
+        setTimeout(() => {
+            if (document.fullscreenElement !== null) {
+                document.exitFullscreen();
+            }
+        }, 2500);
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement !== null) {
+            console.log('Entered fullscreen mode!');
+        } else {
+            console.log('Exited fullscreen mode!');
+        }
+    });
+}
+
+if (document.fullscreenEnabled) {
+    initFullscreen();
 }

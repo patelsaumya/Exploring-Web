@@ -134,7 +134,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 .player__pip,
 .player__play,
-.player__stop {
+.player__stop,
+.player__fullscreen {
   cursor: pointer;
   outline: 0;
   border: 0;
