@@ -176,3 +176,34 @@ const initPictureInPicture = () => {
 if ('pictureInPictureEnabled'  in document) {
     initPictureInPicture();
 }
+
+let wasPlaying;
+
+const initPageVisibility = () => {
+    const handleVisibilityChange = (e) => {
+        const {visibilityState} = e.target;
+        switch(visibilityState) {
+            case 'hidden': {
+                const isPlaying = !media.paused;
+                if (isPlaying) {
+                    wasPlaying = true;
+                    toggleMediaStatus();
+                } else {
+                    wasPlaying = false;
+                }
+                break;
+            }
+            case 'visible': {
+                if (wasPlaying) {
+                    toggleMediaStatus();
+                }
+                break;
+            }
+        }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+}
+
+if ('visibilityState' in document) {
+    initPageVisibility();
+}
